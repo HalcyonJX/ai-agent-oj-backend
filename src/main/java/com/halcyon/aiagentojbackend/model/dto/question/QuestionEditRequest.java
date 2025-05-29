@@ -1,6 +1,5 @@
 package com.halcyon.aiagentojbackend.model.dto.question;
 
-import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 
 import java.io.Serializable;

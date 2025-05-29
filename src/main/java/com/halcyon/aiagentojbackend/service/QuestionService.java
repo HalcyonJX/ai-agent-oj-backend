@@ -21,7 +21,7 @@ public interface QuestionService extends IService<Question> {
      * @param questionAddRequest
      * @return
      */
-    long addQuestion(QuestionAddRequest questionAddRequest);
+    long addQuestion(QuestionAddRequest questionAddRequest,HttpServletRequest request);
 
     /**
      * 获取查询条件
@@ -40,8 +40,7 @@ public interface QuestionService extends IService<Question> {
     /**
      * 分页获取题目封装
      * @param questionPage
-     * @param request
      * @return
      */
-    Page<QuestionVO> getQuestionVOPage(Page<Question> questionPage, HttpServletRequest request);
+    Page<QuestionVO> getQuestionVOPage(Page<Question> questionPage);
 }
