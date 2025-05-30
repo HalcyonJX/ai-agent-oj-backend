@@ -8,6 +8,7 @@ import com.halcyon.aiagentojbackend.model.entity.QuestionSubmit;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.halcyon.aiagentojbackend.model.entity.User;
 import com.halcyon.aiagentojbackend.model.vo.QuestionSubmitVO;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
 * @author 张嘉鑫
@@ -21,7 +22,7 @@ public interface QuestionSubmitService extends IService<QuestionSubmit> {
      * @param questionSubmitAddRequest
      * @return
      */
-    long doQuestionSubmit(QuestionSubmitAddRequest questionSubmitAddRequest);
+    long doQuestionSubmit(QuestionSubmitAddRequest questionSubmitAddRequest, HttpServletRequest request);
 
     /**
      * 获取查询条件

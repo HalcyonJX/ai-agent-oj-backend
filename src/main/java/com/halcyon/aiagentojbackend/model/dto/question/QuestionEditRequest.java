@@ -10,6 +10,10 @@ import java.util.List;
  */
 @Data
 public class QuestionEditRequest implements Serializable {
+    /**
+     * id
+     */
+    private Long id;
 
     /**
      * 题目名称
