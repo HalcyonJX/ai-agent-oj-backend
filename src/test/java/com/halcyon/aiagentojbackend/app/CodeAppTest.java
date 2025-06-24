@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.io.IOException;
 import java.util.UUID;
 
 @SpringBootTest
@@ -31,4 +32,12 @@ class CodeAppTest {
         Assertions.assertNotNull(answer);
     }
 
+    @Test
+    void doChatWithReport() throws IOException {
+        String chatId = UUID.randomUUID().toString();
+        // 第一轮
+        String message = "你好，我是程序员小张，我想学好Java，但是我不知道该怎么做";
+        CodeApp.CodeReport loveReport = codeApp.doChatWithReport(message, chatId);
+        Assertions.assertNotNull(loveReport);
+    }
 }
