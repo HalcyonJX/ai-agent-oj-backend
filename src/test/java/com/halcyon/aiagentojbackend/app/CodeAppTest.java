@@ -40,4 +40,12 @@ class CodeAppTest {
         CodeApp.CodeReport loveReport = codeApp.doChatWithReport(message, chatId);
         Assertions.assertNotNull(loveReport);
     }
+
+    @Test
+    void doChatWithRag() {
+        String chatId = UUID.randomUUID().toString();
+        String message = "我刚开始学习编程，如何选择第一门编程语言？学习编程需要数学很好吗？";
+        String answer =  codeApp.doChatWithRag(message, chatId);
+        Assertions.assertNotNull(answer);
+    }
 }
