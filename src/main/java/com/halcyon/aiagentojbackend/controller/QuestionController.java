@@ -1,6 +1,7 @@
 package com.halcyon.aiagentojbackend.controller;
 
 import cn.hutool.core.bean.BeanUtil;
+import com.baomidou.dynamic.datasource.annotation.DS;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.gson.Gson;
 import com.halcyon.aiagentojbackend.annotation.AuthCheck;
@@ -33,6 +34,7 @@ import java.util.List;
  */
 @RestController
 @Slf4j
+@DS("mysql")
 @RequestMapping("/question")
 public class QuestionController {
 

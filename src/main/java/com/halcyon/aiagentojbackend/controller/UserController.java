@@ -1,5 +1,6 @@
 package com.halcyon.aiagentojbackend.controller;
 
+import com.baomidou.dynamic.datasource.annotation.DS;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.halcyon.aiagentojbackend.annotation.AuthCheck;
 import com.halcyon.aiagentojbackend.common.BaseResponse;
@@ -23,6 +24,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/user")
+@DS("mysql")
 public class UserController {
 
     @Resource
