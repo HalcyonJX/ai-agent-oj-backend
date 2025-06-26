@@ -34,7 +34,6 @@ import java.util.List;
  */
 @RestController
 @Slf4j
-@DS("mysql")
 @RequestMapping("/question")
 public class QuestionController {
 

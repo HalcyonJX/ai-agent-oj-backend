@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 /**
  * 执行代码响应
  */
@@ -17,7 +19,7 @@ public class ExecuteCodeResponse {
     /**
      * 输出
      */
-    private String outputList;
+    private List<String> outputList;
 
     /**
      * 接口信息

@@ -24,7 +24,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/user")
-@DS("mysql")
 public class UserController {
 
     @Resource
