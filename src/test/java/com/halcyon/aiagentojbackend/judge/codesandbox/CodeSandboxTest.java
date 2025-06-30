@@ -34,4 +34,21 @@ class CodeSandboxTest {
         System.out.println("远程代码沙箱");
         Assertions.assertNull(executeCodeResponse);
     }
+
+    @Test
+    void executeCodeByProxy() {
+        CodeSandbox codeSandbox = CodeSandboxFactory.newInstance(type);
+        codeSandbox = new CodeSandboxProxy(codeSandbox);
+        String code = "int main() { }";
+        String language = QuestionSubmitLanguageEnum.JAVA.getValue();
+        List<String> inputList = Arrays.asList("1 2", "3 4");
+        ExecuteCodeRequest executeCodeRequest = ExecuteCodeRequest.builder()
+                .code(code)
+                .language(language)
+                .inputList(inputList)
+                .build();
+        //因为executeCodeResponse是null，所以调用toString方法会空指针异常，暂时不管。
+        ExecuteCodeResponse executeCodeResponse = codeSandbox.executeCode(executeCodeRequest);
+        Assertions.assertNull(executeCodeResponse);
+    }
 }
