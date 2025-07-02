@@ -39,7 +39,15 @@ class CodeSandboxTest {
     void executeCodeByProxy() {
         CodeSandbox codeSandbox = CodeSandboxFactory.newInstance(type);
         codeSandbox = new CodeSandboxProxy(codeSandbox);
-        String code = "int main() { }";
+        String code = "import java.util.Scanner;\n" +
+                "class Main{\n" +
+                "    public static void main(String[] args) {\n" +
+                "        Scanner sc = new Scanner(System.in);\n" +
+                "        int a = sc.nextInt();\n" +
+                "        int b = sc.nextInt();\n" +
+                "        System.out.println(a+b);\n" +
+                "    }\n" +
+                "}";
         String language = QuestionSubmitLanguageEnum.JAVA.getValue();
         List<String> inputList = Arrays.asList("1 2", "3 4");
         ExecuteCodeRequest executeCodeRequest = ExecuteCodeRequest.builder()
@@ -49,6 +57,6 @@ class CodeSandboxTest {
                 .build();
         //因为executeCodeResponse是null，所以调用toString方法会空指针异常，暂时不管。
         ExecuteCodeResponse executeCodeResponse = codeSandbox.executeCode(executeCodeRequest);
-        Assertions.assertNull(executeCodeResponse);
+        Assertions.assertNotNull(executeCodeResponse);
     }
 }

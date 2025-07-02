@@ -9,6 +9,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.halcyon.aiagentojbackend.exception.ErrorCode;
 import com.halcyon.aiagentojbackend.exception.ThrowUtils;
+import com.halcyon.aiagentojbackend.judge.service.JudgeService;
 import com.halcyon.aiagentojbackend.model.dto.question.QuestionSubmitAddRequest;
 import com.halcyon.aiagentojbackend.model.dto.question.QuestionSubmitQueryRequest;
 import com.halcyon.aiagentojbackend.model.entity.QuestionSubmit;
@@ -41,6 +42,9 @@ public class QuestionSubmitServiceImpl extends ServiceImpl<QuestionSubmitMapper,
     @Resource
     private UserService userService;
 
+    @Resource
+    private JudgeService judgeService;
+
     @Override
     public long doQuestionSubmit(QuestionSubmitAddRequest questionSubmitAddRequest, HttpServletRequest request) {
         ThrowUtils.throwIf(questionSubmitAddRequest == null, ErrorCode.PARAMS_ERROR);
@@ -63,7 +67,9 @@ public class QuestionSubmitServiceImpl extends ServiceImpl<QuestionSubmitMapper,
         ThrowUtils.throwIf(!save, ErrorCode.SYSTEM_ERROR,"数据插入失败");
         Long id = questionSubmit.getId();
         //todo 执行判题服务
-
+        CompletableFuture.runAsync(()->{
+            judgeService.doJudge(id);
+        });
         return id;
     }
 
