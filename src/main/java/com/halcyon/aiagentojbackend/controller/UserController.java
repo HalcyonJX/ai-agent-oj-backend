@@ -158,4 +158,23 @@ public class UserController {
         return ResultUtils.success(userVOPage);
     }
 
+    /**
+     * 用户编辑个人资料
+     * @param userEditRequest
+     * @param request
+     * @return
+     */
+    @PostMapping("/edit")
+    public BaseResponse<Boolean> editUser(@RequestBody UserEditRequest userEditRequest,HttpServletRequest request){
+        ThrowUtils.throwIf(userEditRequest == null,ErrorCode.PARAMS_ERROR,"请求参数错误");
+        User loginUser = userService.getLoginUser(request);
+        ThrowUtils.throwIf(loginUser == null,ErrorCode.NOT_LOGIN_ERROR,"用户未登录");
+        User user = new User();
+        BeanUtils.copyProperties(userEditRequest,user);
+        user.setId(loginUser.getId());
+        boolean result = userService.updateById(user);
+        ThrowUtils.throwIf(!result,ErrorCode.OPERATION_ERROR,"操作数据库失败");
+        return ResultUtils.success(true);
+    }
+
 }
