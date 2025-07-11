@@ -51,3 +51,19 @@ create table if not exists question_submit
     index idx_questionId (questionId),
     index idx_userId (userId)
 )comment '题目提交';
+
+-- 评论表
+create table if not exists comment(
+    id          bigint auto_increment comment 'id' primary key ,
+    userId      bigint                      not null comment '用户id，用于关联用户表',
+    questionId  bigint                      not null comment '题目id，用于关联题目表',
+    content     varchar(512)                not null comment '评论内容',
+    beCommentId bigint                               comment '被评论id，用于二级评论',
+    thumbNum   int                default 0 not null comment '点赞数',
+    replyNum  int                 default 0 not null comment '回复数',
+    createTime datetime default CURRENT_TIMESTAMP not null comment '创建时间',
+    updateTime datetime default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间',
+    isDelete   tinyint  default 0                 not null comment '是否删除',
+    index idx_questionId(questionId),
+    index idx_userId(userId)
+)comment '评论表';
