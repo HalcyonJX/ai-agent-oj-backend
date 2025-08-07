@@ -12,10 +12,14 @@ import com.halcyon.aiagentojbackend.constant.UserConstant;
 import com.halcyon.aiagentojbackend.exception.BusinessException;
 import com.halcyon.aiagentojbackend.exception.ErrorCode;
 import com.halcyon.aiagentojbackend.exception.ThrowUtils;
+import com.halcyon.aiagentojbackend.manager.AiManager;
 import com.halcyon.aiagentojbackend.model.dto.question.*;
 import com.halcyon.aiagentojbackend.model.entity.Question;
 import com.halcyon.aiagentojbackend.model.entity.QuestionSubmit;
 import com.halcyon.aiagentojbackend.model.entity.User;
+import com.halcyon.aiagentojbackend.model.enums.QuestionSubmitLanguageEnum;
+import com.halcyon.aiagentojbackend.model.vo.AIAnswerVO;
+import com.halcyon.aiagentojbackend.model.vo.AiGeneratedQuestionVO;
 import com.halcyon.aiagentojbackend.model.vo.QuestionSubmitVO;
 import com.halcyon.aiagentojbackend.model.vo.QuestionVO;
 import com.halcyon.aiagentojbackend.service.QuestionService;
@@ -45,6 +49,9 @@ public class QuestionController {
 
     @Resource
     private QuestionSubmitService questionSubmitService;
+
+    @Resource
+    private AiManager aiManager;
 
     private static final Gson GSON = new Gson();
     /**
@@ -254,6 +261,46 @@ public class QuestionController {
         final User loginUser = userService.getLoginUser(request);
         // 返回脱敏信息
         return ResultUtils.success(questionSubmitService.getQuestionSubmitVOPage(questionSubmitPage, loginUser));
+    }
+
+    /**
+     * AI生成题目接口
+     * @param questionGenerateRequest
+     * @param request
+     * @return
+     */
+    @PostMapping("/generate")
+    public BaseResponse<AiGeneratedQuestionVO> generatedQuestion(@RequestBody QuestionGenerateRequest questionGenerateRequest,HttpServletRequest request){
+        ThrowUtils.throwIf(questionGenerateRequest == null,ErrorCode.PARAMS_ERROR);
+        String title = questionGenerateRequest.getTitle();
+        List<String> tags = questionGenerateRequest.getTags();
+        // 标题和标签至少有一个不为空
+        if ((title == null || title.isEmpty()) && (tags == null || tags.isEmpty())) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "题目标题和标签至少提供一项");
+        }
+        // 登录且是管理员才能使用AI生成功能
+        User loginUser = userService.getLoginUser(request);
+        ThrowUtils.throwIf(loginUser == null && !UserConstant.ADMIN_ROLE.equals(loginUser.getUserRole()), ErrorCode.NO_AUTH_ERROR);
+
+        //调用AI生成题目
+        AiGeneratedQuestionVO aiGeneratedQuestionVO = aiManager.generateProgrammingQuestion(title, tags);
+        aiGeneratedQuestionVO.setSampleCode("```java "+aiGeneratedQuestionVO.getSampleCode());
+        return ResultUtils.success(aiGeneratedQuestionVO);
+    }
+
+    @PostMapping("/ai/answer")
+    public BaseResponse<AIAnswerVO> aiAnswer(@RequestBody AIAnswerRequest aiAnswerRequest,HttpServletRequest request){
+        ThrowUtils.throwIf(aiAnswerRequest == null,ErrorCode.PARAMS_ERROR);
+        //如果没有编程语言，默认为Java
+        if(aiAnswerRequest.getLanguage() == null){
+            aiAnswerRequest.setLanguage(QuestionSubmitLanguageEnum.JAVA.getValue());
+        }
+        User loginUser = userService.getLoginUser(request);
+        ThrowUtils.throwIf(loginUser == null,ErrorCode.NOT_LOGIN_ERROR);
+        Question question = questionService.getById(aiAnswerRequest.getQuestionId());
+        ThrowUtils.throwIf(question == null,ErrorCode.NOT_FOUND_ERROR);
+        AIAnswerVO result = aiManager.getResult(question.getTitle(), question.getContent(), aiAnswerRequest.getLanguage(), question.getId());
+        return ResultUtils.success(result);
     }
 
 }

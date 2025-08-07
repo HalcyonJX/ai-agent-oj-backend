@@ -1,11 +1,11 @@
 package com.halcyon.aiagentojbackend.model.vo;
 
-import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.halcyon.aiagentojbackend.model.dto.question.JudgeInfo;
 import com.halcyon.aiagentojbackend.model.entity.QuestionSubmit;
 import lombok.Data;
+import org.springframework.beans.BeanUtils;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -80,7 +80,7 @@ public class QuestionSubmitVO implements Serializable {
             return null;
         }
         QuestionSubmit questionSubmit = new QuestionSubmit();
-        BeanUtil.copyProperties(questionSubmitVO,questionSubmit);
+        BeanUtils.copyProperties(questionSubmitVO,questionSubmit);
         JudgeInfo judgeInfoObj = questionSubmitVO.getJudgeInfo();
         if(judgeInfoObj != null){
             questionSubmit.setJudgeInfo(JSONUtil.toJsonStr(judgeInfoObj));
@@ -98,7 +98,7 @@ public class QuestionSubmitVO implements Serializable {
             return null;
         }
         QuestionSubmitVO questionSubmitVO = new QuestionSubmitVO();
-        BeanUtil.copyProperties(questionSubmit,questionSubmitVO);
+        BeanUtils.copyProperties(questionSubmit,questionSubmitVO);
         JSONObject jsonObject = JSONUtil.parseObj(questionSubmit.getJudgeInfo());
         questionSubmitVO.setJudgeInfo(jsonObject.toBean(JudgeInfo.class));
         return questionSubmitVO;

@@ -83,6 +83,10 @@ public class JudgeServiceImpl implements JudgeService {
         judgeContext.setQuestion(question);
         judgeContext.setQuestionSubmit(questionSubmit);
         JudgeInfo judgeInfo = judgeManager.doJudge(judgeContext);
+        if(judgeInfo.getMessage().equals("成功")){
+            question.setAcceptedNum(question.getAcceptedNum()+1);
+            questionService.updateById(question);
+        }
         // 6）修改数据库中的判题结果
         questionSubmitUpdate = new QuestionSubmit();
         questionSubmitUpdate.setId(questionSubmitId);

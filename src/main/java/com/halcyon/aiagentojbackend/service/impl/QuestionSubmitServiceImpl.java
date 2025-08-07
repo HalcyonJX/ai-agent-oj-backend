@@ -73,6 +73,9 @@ public class QuestionSubmitServiceImpl extends ServiceImpl<QuestionSubmitMapper,
         questionSubmit.setJudgeInfo(JudgeInfoMessageEnum.WAITING.getValue());
         boolean save = this.save(questionSubmit);
         ThrowUtils.throwIf(!save, ErrorCode.SYSTEM_ERROR,"数据插入失败");
+        question.setSubmitNum(question.getSubmitNum()+1);
+        boolean b = questionService.updateById(question);
+        ThrowUtils.throwIf(!b,ErrorCode.SYSTEM_ERROR,"数据更新失败");
         Long id = questionSubmit.getId();
         //todo 执行判题服务
         CompletableFuture.runAsync(()-> judgeService.doJudge(id));
